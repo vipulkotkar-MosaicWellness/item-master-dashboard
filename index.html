@@ -387,14 +387,6 @@ select.fsel:focus{border-color:var(--teal)}
     <span class="nav-icon">&#127991;</span>Brand Data Health<span class="nav-badge" id="nb-br">-</span>
   </div>
 
-  <div class="nav-sec-divider"></div>
-  <div class="nav-sec">Reports</div>
-  <div class="nav-item" id="nav-rep-grn" onclick="goPage('rep-grn')">
-    <span class="nav-icon">&#128197;</span>GRN Last Week<span class="nav-badge" style="background:#eef1ff;color:#2757ff;border-color:#c7d0ff">8</span>
-  </div>
-  <div class="nav-item" id="nav-rep-overall" onclick="goPage('rep-overall')">
-    <span class="nav-icon">&#128202;</span>Overall Report<span class="nav-badge" style="background:var(--teal-s);color:var(--teal);border-color:var(--teal-m)">219</span>
-  </div>
 </div>
 
 <div class="content">
@@ -427,6 +419,7 @@ select.fsel:focus{border-color:var(--teal)}
 <div class="page" id="page-articles">
   <div class="page-head">
     <div><div class="page-title">Article Data Status</div><div class="page-sub">Per-SKU data hygiene &middot; Driven by toggle above</div></div>
+    <button class="btn-export" onclick="exportArticleData()">&#8659; Export CSV</button>
   </div>
   <div class="search-row">
     <input class="sinput" id="artSrch" placeholder="Search SKU, name, brand, EAN..." oninput="artApply()"/>
@@ -441,7 +434,7 @@ select.fsel:focus{border-color:var(--teal)}
       <th onclick="artSortBy('Product Code')">SKU</th><th onclick="artSortBy('Name')">Item Name</th>
       <th onclick="artSortBy('_brand')">Brand</th><th onclick="artSortBy('Created Date')">Created</th>
       <th onclick="artSortBy('_c')">Complete %</th><th onclick="artSortBy('MRP')">MRP</th>
-      <th>EAN</th><th>HSN</th><th>Cost Price</th><th>Tax Code</th><th>Dispatch Expiry</th><th>Brand Std.</th><th>Pending</th>
+      <th>EAN</th><th>HSN</th><th>Cost Price</th><th>Tax Code</th><th>Dispatch Expiry</th><th>Pending Fields</th><th>Status</th>
     </tr></thead>
     <tbody id="artBody"></tbody>
   </table></div><div class="pager"><span id="artPgInfo"></span></div></div>
@@ -457,98 +450,6 @@ select.fsel:focus{border-color:var(--teal)}
     <span class="rcount" id="brandCount"></span>
   </div>
   <div class="brand-grid" id="brandGrid"></div>
-</div>
-
-<!-- GRN LAST WEEK REPORT -->
-<div class="page" id="page-rep-grn">
-  <div class="page-head">
-    <div>
-      <div class="page-title" style="display:flex;align-items:center;gap:10px">
-        <span style="background:#eef1ff;color:#2757ff;border:1.5px solid #c7d0ff;padding:4px 12px;border-radius:7px;font-size:14px;font-weight:700">GRN Last Week</span>
-        Report
-      </div>
-      <div class="page-sub">SIMPLE SKUs &middot; Created &ge; 01 Apr 2026 &middot; In Live tracker &middot; 16 hygiene fields</div>
-    </div>
-    <button class="btn-export" onclick="exportReport('grn')">&#8659; Export CSV</button>
-  </div>
-  <div class="card" style="margin-bottom:20px">
-    <div class="rep-strip">
-      <div class="rep-stat"><div class="rep-stat-val" id="rg-total" style="color:#2757ff">-</div><div class="rep-stat-lbl">Total SKUs</div></div>
-      <div class="rep-stat"><div class="rep-stat-val" id="rg-comp">-</div><div class="rep-stat-lbl">Avg Completeness</div></div>
-      <div class="rep-stat"><div class="rep-stat-val" id="rg-full" style="color:#00996e">-</div><div class="rep-stat-lbl">Data Verified</div></div>
-      <div class="rep-stat"><div class="rep-stat-val" id="rg-pend" style="color:#d63131">-</div><div class="rep-stat-lbl">Pending Update</div></div>
-    </div>
-    <div class="tbl-wrap"><table>
-      <thead><tr>
-        <th onclick="repSortBy('grn','Product Code')">SKU</th>
-        <th onclick="repSortBy('grn','Name')">Item Name</th>
-        <th onclick="repSortBy('grn','_brand')">Brand</th>
-        <th onclick="repSortBy('grn','Created Date')">Created</th>
-        <th onclick="repSortBy('grn','_c')">Complete %</th>
-        <th onclick="repSortBy('grn','MRP')">MRP</th>
-        <th>EAN</th><th>HSN</th><th>Cost Price</th><th>Tax Code</th><th>Dispatch Expiry</th><th>Brand Std.</th><th>Pending</th>
-      </tr></thead>
-      <tbody id="rg-body"></tbody>
-    </table></div>
-    <div class="pager">
-      <span id="rg-count"></span>
-      <div style="display:flex;gap:8px;align-items:center">
-        <div class="search-row" style="margin:0">
-          <input class="sinput" id="rg-srch" placeholder="Search..." oninput="applyReport('grn')" style="min-width:160px;padding:6px 12px"/>
-          <select class="fsel" id="rg-st" onchange="applyReport('grn')" style="padding:6px 10px">
-            <option value="all">All</option><option value="inc">Pending</option><option value="ok">Complete</option>
-          </select>
-          <select class="fsel" id="rg-br" onchange="applyReport('grn')" style="padding:6px 10px"><option value="all">All Brands</option></select>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- OVERALL REPORT -->
-<div class="page" id="page-rep-overall">
-  <div class="page-head">
-    <div>
-      <div class="page-title" style="display:flex;align-items:center;gap:10px">
-        <span style="background:var(--teal-s);color:var(--teal);border:1.5px solid var(--teal-m);padding:4px 12px;border-radius:7px;font-size:14px;font-weight:700">Overall</span>
-        Report
-      </div>
-      <div class="page-sub">All SIMPLE SKUs &middot; In Live tracker &middot; All dates &middot; 16 hygiene fields</div>
-    </div>
-    <button class="btn-export" onclick="exportReport('overall')">&#8659; Export CSV</button>
-  </div>
-  <div class="card" style="margin-bottom:20px">
-    <div class="rep-strip">
-      <div class="rep-stat"><div class="rep-stat-val" id="ro-total">-</div><div class="rep-stat-lbl">Total SKUs</div></div>
-      <div class="rep-stat"><div class="rep-stat-val" id="ro-comp">-</div><div class="rep-stat-lbl">Avg Completeness</div></div>
-      <div class="rep-stat"><div class="rep-stat-val" id="ro-full" style="color:#00996e">-</div><div class="rep-stat-lbl">Data Verified</div></div>
-      <div class="rep-stat"><div class="rep-stat-val" id="ro-pend" style="color:#d63131">-</div><div class="rep-stat-lbl">Pending Update</div></div>
-    </div>
-    <div class="tbl-wrap"><table>
-      <thead><tr>
-        <th onclick="repSortBy('overall','Product Code')">SKU</th>
-        <th onclick="repSortBy('overall','Name')">Item Name</th>
-        <th onclick="repSortBy('overall','_brand')">Brand</th>
-        <th onclick="repSortBy('overall','Created Date')">Created</th>
-        <th onclick="repSortBy('overall','_c')">Complete %</th>
-        <th onclick="repSortBy('overall','MRP')">MRP</th>
-        <th>EAN</th><th>HSN</th><th>Cost Price</th><th>Tax Code</th><th>Dispatch Expiry</th><th>Brand Std.</th><th>Pending</th>
-      </tr></thead>
-      <tbody id="ro-body"></tbody>
-    </table></div>
-    <div class="pager">
-      <span id="ro-count"></span>
-      <div style="display:flex;gap:8px;align-items:center">
-        <div class="search-row" style="margin:0">
-          <input class="sinput" id="ro-srch" placeholder="Search..." oninput="applyReport('overall')" style="min-width:160px;padding:6px 12px"/>
-          <select class="fsel" id="ro-st" onchange="applyReport('overall')" style="padding:6px 10px">
-            <option value="all">All</option><option value="inc">Pending</option><option value="ok">Complete</option>
-          </select>
-          <select class="fsel" id="ro-br" onchange="applyReport('overall')" style="padding:6px 10px"><option value="all">All Brands</option></select>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
 
 </div></div></div>
@@ -634,7 +535,7 @@ function updateBanner(){
 }
 
 // All pages
-var ALL_PAGES=["overview","articles","brands","rep-grn","rep-overall"];
+var ALL_PAGES=["overview","articles","brands"];
 window.goPage=function(id){
   ALL_PAGES.forEach(function(p){
     document.getElementById("page-"+p).classList.remove("active");
@@ -645,8 +546,7 @@ window.goPage=function(id){
   if(id==="overview") renderOverview();
   else if(id==="articles"){syncBrandSel("artBr",getViewData());artApply();}
   else if(id==="brands") renderBrands();
-  else if(id==="rep-grn") renderReport("grn");
-  else if(id==="rep-overall") renderReport("overall");
+
 };
 
 /* DATA HYGIENE STATUS */
@@ -719,7 +619,7 @@ function buildTable(tbodyId,rows){
   var tb=document.getElementById(tbodyId); tb.innerHTML="";
   if(rows.length===0){
     var empty=document.createElement("tr");
-    empty.innerHTML='<td colspan="13" style="text-align:center;padding:32px;color:var(--ink3);font-style:italic">No items for this selection</td>';
+    empty.innerHTML='<td colspan="12" style="text-align:center;padding:32px;color:var(--ink3);font-style:italic">No items for this selection</td>';
     tb.appendChild(empty); return;
   }
   rows.forEach(function(r){
@@ -728,7 +628,7 @@ function buildTable(tbodyId,rows){
     var nms=nm.length>32?nm.substring(0,32)+"...":nm;
     var mrp=r["MRP"]&&fieldOk(r["MRP"])?"&#8377;"+parseFloat(r["MRP"]).toLocaleString("en-IN"):'<span class="v-miss">-</span>';
     var bc=r._changed?'<span class="brand-std">'+r._brand+'</span><span class="brand-orig">'+(r["Brand"]||"")+'</span>':'<span class="brand-std">'+r._brand+"</span>";
-    var sc=r._changed?'<span class="v-miss">&#10007;</span>':'<span class="v-ok">&#10003;</span>';
+    
     var mt=miss.length?'<span class="mono miss-cnt" title="'+miss.join(", ")+'">'+miss.length+' pending</span>':'<span class="v-ok">&#10003; Complete</span>';
     var tr=document.createElement("tr");
     tr.innerHTML=
@@ -743,8 +643,8 @@ function buildTable(tbodyId,rows){
       '<td>'+chk(r["Cost Price"])+'</td>'+
       '<td>'+chk(r["Tax Type Code"])+'</td>'+
       '<td>'+chk(r["Dispatch expiry tolerance (in days)"])+'</td>'+
-      '<td>'+sc+'</td>'+
-      '<td>'+mt+'</td>';
+      '<td>'+mt+'</td>'+
+      '<td>'+(r._c===100?'<span class="v-ok" style="font-weight:700">Completed</span>':'<span class="v-miss" style="font-weight:700">Pending</span>')+'</td>';
     tb.appendChild(tr);
   });
 }
@@ -876,6 +776,40 @@ function renderBrands(){
     grid.appendChild(div);
   });
 }
+
+/* EXPORT ARTICLE DATA */
+window.exportArticleData=function(){
+  var rows=artFiltered;
+  var label=GLOBAL_VIEW==="grn"?"GRN_Last_Week":"Overall";
+  var headers=["Product Code","Item Name","Brand","Created Date","Completeness %",
+    "Status","MRP","EAN","HSN CODE","Cost Price","Tax Type Code",
+    "Dispatch expiry tolerance (in days)","Missing Fields"];
+  var csvRows=[headers.join(",")];
+  rows.forEach(function(r){
+    var miss=r._m||[];
+    var status=r._c===100?"Completed":"Pending";
+    csvRows.push([
+      r["Product Code"]||"",
+      '"'+(r["Name"]||"").replace(/"/g,'""')+'"',
+      r._brand||"",
+      r["Created Date"]||"",
+      r._c+"%",
+      status,
+      r["MRP"]||"",
+      r["EAN"]||"",
+      r["HSN CODE"]||"",
+      r["Cost Price"]||"",
+      r["Tax Type Code"]||"",
+      r["Dispatch expiry tolerance (in days)"]||"",
+      '"'+miss.join("; ")+'"'
+    ].join(","));
+  });
+  var blob=new Blob([csvRows.join("\n")],{type:"text/csv"});
+  var a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="ItemMaster_"+label+"_"+new Date().toISOString().slice(0,10)+".csv";
+  a.click();
+};
 
 /* INIT */
 updateBanner();
