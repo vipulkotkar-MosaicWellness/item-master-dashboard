@@ -168,6 +168,12 @@ select.fsel:focus{border-color:var(--teal)}
   color:var(--teal);font-weight:600}
 .fcrit .fnum{background:var(--teal);color:#fff;border-radius:5px;
   padding:1px 8px;font-family:'JetBrains Mono',monospace;font-size:11px}
+
+.filter-banner{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.fcrit{display:flex;align-items:center;gap:7px;padding:8px 14px;border-radius:9px;
+  background:var(--teal-s);border:1.5px solid var(--teal-m);font-size:12px;color:var(--teal);font-weight:600}
+.fcrit .fnum{background:var(--teal);color:#fff;border-radius:5px;
+  padding:1px 8px;font-family:'JetBrains Mono',monospace;font-size:11px}
 </style>
 </head>
 <body>
@@ -201,7 +207,7 @@ select.fsel:focus{border-color:var(--teal)}
   </div>
   <div style="margin-top:auto;padding:14px 10px;border-top:1.5px solid var(--border)">
     <div style="font-size:9.5px;font-family:'JetBrains Mono',monospace;color:var(--ink3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Active Filters</div>
-    <div style="font-size:11px;color:var(--ink2);line-height:1.8">
+    <div style="font-size:11px;color:var(--ink2);line-height:1.9">
       &#10003; SIMPLE items only<br/>
       &#10003; Created &ge; 01 Apr 2026<br/>
       &#10003; Live SKU list match<br/>
@@ -212,23 +218,20 @@ select.fsel:focus{border-color:var(--teal)}
 
 <div class="content">
 
-<!-- PAGE 1: DATA HYGIENE STATUS -->
+<!-- PAGE 1 -->
 <div class="page active" id="page-overview">
   <div class="page-head">
     <div>
       <div class="page-title">Data Hygiene Status</div>
-      <div class="page-sub">SIMPLE items &middot; Created on or after 01 Apr 2026 &middot; In Live SKU list</div>
+      <div class="page-sub">SIMPLE items &middot; Created &ge; 01 Apr 2026 &middot; Matched to Live SKU list</div>
     </div>
   </div>
-
-  <!-- Filter summary chips -->
   <div class="filter-banner">
     <div class="fcrit">&#128230; Item Type <span class="fnum">SIMPLE only</span></div>
     <div class="fcrit">&#128197; Created Date <span class="fnum">&ge; 01 Apr 2026</span></div>
     <div class="fcrit">&#128279; Live SKU Match <span class="fnum">219 source SKUs</span></div>
     <div class="fcrit">&#10003; Result <span class="fnum">8 Active SKUs</span></div>
   </div>
-
   <div class="kpi-row">
     <div class="kpi kk-teal"><div class="kpi-lbl">Active Live SKUs</div><div class="kpi-val" id="ov-total">—</div><div class="kpi-meta">SIMPLE + Apr 2026+ + Live list</div></div>
     <div class="kpi kk-amber"><div class="kpi-lbl">Fields Pending</div><div class="kpi-val" id="ov-gaps">—</div><div class="kpi-meta">Across 16 tracked fields</div></div>
@@ -236,7 +239,6 @@ select.fsel:focus{border-color:var(--teal)}
     <div class="kpi kk-red"><div class="kpi-lbl">Critical Gaps</div><div class="kpi-val" id="ov-crit">—</div><div class="kpi-meta">EAN / Cost / HSN / MRP / Brand</div></div>
     <div class="kpi kk-blue"><div class="kpi-lbl">Data Verified</div><div class="kpi-val" id="ov-full">—</div><div class="kpi-meta">100% all fields complete</div></div>
   </div>
-
   <div class="slbl">Data Hygiene Scorecard &mdash; 16 Fields &mdash; worst to best</div>
   <div class="card">
     <div class="card-hd">
@@ -252,12 +254,12 @@ select.fsel:focus{border-color:var(--teal)}
   </div>
 </div>
 
-<!-- PAGE 2: ARTICLE DATA STATUS -->
+<!-- PAGE 2 -->
 <div class="page" id="page-articles">
   <div class="page-head">
     <div>
       <div class="page-title">Article Data Status</div>
-      <div class="page-sub">Per-SKU hygiene &middot; SIMPLE &middot; Created &ge; 01 Apr 2026 &middot; In Live SKU list</div>
+      <div class="page-sub">Per-SKU hygiene &middot; SIMPLE &middot; Created &ge; 01 Apr 2026 &middot; Live SKU match</div>
     </div>
   </div>
   <div class="search-row">
@@ -284,6 +286,7 @@ select.fsel:focus{border-color:var(--teal)}
           <th>HSN</th>
           <th>Cost Price</th>
           <th>Tax Code</th>
+          <th>Dispatch Expiry</th>
           <th>Brand Std.</th>
           <th>Pending Fields</th>
         </tr></thead>
@@ -294,12 +297,12 @@ select.fsel:focus{border-color:var(--teal)}
   </div>
 </div>
 
-<!-- PAGE 3: BRAND DATA HEALTH -->
+<!-- PAGE 3 -->
 <div class="page" id="page-brands">
   <div class="page-head">
     <div>
       <div class="page-title">Brand Data Health</div>
-      <div class="page-sub">Standardized brand names &middot; Missing fields per brand &middot; 8 Active Live SKUs</div>
+      <div class="page-sub">Standardized brand names &middot; 8 Active Live SKUs</div>
     </div>
   </div>
   <div class="search-row">
@@ -311,28 +314,30 @@ select.fsel:focus{border-color:var(--teal)}
 
 </div></div></div>
 
-<script type="application/json" id="itemData">[{"Product Code":"MWLJNTP.00746.BO_N","Name":"LJ Proteinmix - 500 g","Brand":"Little Joys","Category Name":"Default","MRP":999.0,"HSN CODE":"21061000","EAN":"8904529300554","Cost Price":284.0,"Scan Identifier":"8904529300554","Length (mm)":220,"Width (mm)":100,"Height (mm)":260,"Weight (gms)":500.0,"Tax Type Code":"DEFAULT","GST Tax Type Code":"5","Determine Expiry From":"MANUFACTURING_DATE","Shelf Life":360.0,"Sku Type":"GOODS","Created Date":"2026-04-20","_c":100,"_m":[],"_brand":"Little Joys","_changed":false},{"Product Code":"MWBBHFP.00199.BO_N","Name":"Be Bodywise Hair Growth Serum Spray 30 ml","Brand":"Be Bodywise","Category Name":"Default","MRP":699.0,"HSN CODE":"34013090","EAN":"8904529300561","Cost Price":149.74,"Scan Identifier":"8904529300561","Length (mm)":92,"Width (mm)":36,"Height (mm)":90,"Weight (gms)":30.0,"Tax Type Code":"DEFAULT","GST Tax Type Code":"18","Determine Expiry From":"MANUFACTURING_DATE","Shelf Life":720.0,"Sku Type":"GOODS","Created Date":"2026-05-04","_c":100,"_m":[],"_brand":"Be Bodywise","_changed":false},{"Product Code":"MWMMSKP.5064.AAAABO_N","Name":"Man Matters Anti Acne Face Wash 100ml","Brand":"Man Matters","Category Name":"Default","MRP":349.0,"HSN CODE":"33049990","EAN":"8904529300592","Cost Price":70.0,"Scan Identifier":"8904529300592","Length (mm)":42,"Width (mm)":42,"Height (mm)":132,"Weight (gms)":100.0,"Tax Type Code":"DEFAULT","GST Tax Type Code":"18","Determine Expiry From":"MANUFACTURING_DATE","Shelf Life":720.0,"Sku Type":"GOODS","Created Date":"2026-05-08","_c":100,"_m":[],"_brand":"Man Matters","_changed":false},{"Product Code":"MWMMSKP.5066.AAAABO_N","Name":"Man Matters Anti Pigmentation Serum 30ml","Brand":"Man Matters","Category Name":"Default","MRP":599.0,"HSN CODE":"33059090","EAN":"8904529300578","Cost Price":122.0,"Scan Identifier":"8904529300578","Length (mm)":92,"Width (mm)":36,"Height (mm)":90,"Weight (gms)":30.0,"Tax Type Code":"DEFAULT","GST Tax Type Code":"18","Determine Expiry From":"MANUFACTURING_DATE","Shelf Life":720.0,"Sku Type":"GOODS","Created Date":"2026-05-08","_c":100,"_m":[],"_brand":"Man Matters","_changed":false},{"Product Code":"MWMMSKP.5065.AAAABO_N","Name":"Man Matters Matte Sunscreen SPF 50","Brand":"Man Matters","Category Name":"Default","MRP":499.0,"HSN CODE":"33049930","EAN":"8904529300585","Cost Price":105.0,"Scan Identifier":"8904529300585","Length (mm)":50,"Width (mm)":50,"Height (mm)":98,"Weight (gms)":50.0,"Tax Type Code":"DEFAULT","GST Tax Type Code":"18","Determine Expiry From":"MANUFACTURING_DATE","Shelf Life":720.0,"Sku Type":"GOODS","Created Date":"2026-05-08","_c":100,"_m":[],"_brand":"Man Matters","_changed":false},{"Product Code":"MWBBOCP.0010.BO_N","Name":"Be Bodywise Pain Relief Roll On  - 50 ml","Brand":"Be Bodywise","Category Name":"Default","MRP":549.0,"HSN CODE":"30049011","EAN":"8904529300608","Cost Price":67.0,"Scan Identifier":"8904529300608","Length (mm)":98,"Width (mm)":32,"Height (mm)":90,"Weight (gms)":50.0,"Tax Type Code":"DEFAULT","GST Tax Type Code":"18","Determine Expiry From":"MANUFACTURING_DATE","Shelf Life":270.0,"Sku Type":"GOODS","Created Date":"2026-05-08","_c":100,"_m":[],"_brand":"Be Bodywise","_changed":false},{"Product Code":"MWBWSKK.00822.BO_N","Name":"Be Bodywise 5% AHA BHA Exfoliating Body Wash (Flora) - 250 ml","Brand":"Be Bodywise","Category Name":"Default","MRP":399.0,"HSN CODE":"34013090","EAN":"8904529300615","Cost Price":84.32,"Scan Identifier":"8904529300615","Length (mm)":178,"Width (mm)":52,"Height (mm)":180,"Weight (gms)":250.0,"Tax Type Code":"DEFAULT","GST Tax Type Code":"18","Determine Expiry From":"MANUFACTURING_DATE","Shelf Life":720.0,"Sku Type":"GOODS","Created Date":"2026-05-08","_c":100,"_m":[],"_brand":"Be Bodywise","_changed":false},{"Product Code":"MWBWSKK.00821.BO_N","Name":"Be Bodywise 5% AHA BHA Exfoliating Body Wash (Flora) - 700 ml","Brand":"Be Bodywise","Category Name":"Default","MRP":799.0,"HSN CODE":"34013090","EAN":"8904529300622","Cost Price":206.0,"Scan Identifier":"8904529300622","Length (mm)":248,"Width (mm)":72,"Height (mm)":255,"Weight (gms)":700.0,"Tax Type Code":"DEFAULT","GST Tax Type Code":"18","Determine Expiry From":"MANUFACTURING_DATE","Shelf Life":720.0,"Sku Type":"GOODS","Created Date":"2026-05-08","_c":100,"_m":[],"_brand":"Be Bodywise","_changed":false}]</script>
+<script type="application/json" id="itemData">[{"Product Code":"MWLJNTP.00746.BO_N","Name":"LJ Proteinmix - 500 g","Brand":"Little Joys","Category Name":"Default","MRP":999.0,"HSN CODE":"21061000","EAN":"8904529300554","Cost Price":284.0,"Scan Identifier":"8904529300554","Length (mm)":220,"Width (mm)":100,"Height (mm)":260,"Weight (gms)":500.0,"Tax Type Code":"DEFAULT","GST Tax Type Code":"5","Dispatch expiry tolerance (in days)":75.0,"Shelf Life":360.0,"Sku Type":"GOODS","Created Date":"2026-04-20","_c":100,"_m":[],"_brand":"Little Joys","_changed":false},{"Product Code":"MWBBHFP.00199.BO_N","Name":"Be Bodywise Hair Growth Serum Spray 30 ml","Brand":"Be Bodywise","Category Name":"Default","MRP":699.0,"HSN CODE":"34013090","EAN":"8904529300561","Cost Price":149.74,"Scan Identifier":"8904529300561","Length (mm)":92,"Width (mm)":36,"Height (mm)":90,"Weight (gms)":30.0,"Tax Type Code":"DEFAULT","GST Tax Type Code":"18","Dispatch expiry tolerance (in days)":90.0,"Shelf Life":720.0,"Sku Type":"GOODS","Created Date":"2026-05-04","_c":100,"_m":[],"_brand":"Be Bodywise","_changed":false},{"Product Code":"MWMMSKP.5064.AAAABO_N","Name":"Man Matters Anti Acne Face Wash 100ml","Brand":"Man Matters","Category Name":"Default","MRP":349.0,"HSN CODE":"33049990","EAN":"8904529300592","Cost Price":70.0,"Scan Identifier":"8904529300592","Length (mm)":42,"Width (mm)":42,"Height (mm)":132,"Weight (gms)":100.0,"Tax Type Code":"DEFAULT","GST Tax Type Code":"18","Dispatch expiry tolerance (in days)":90.0,"Shelf Life":720.0,"Sku Type":"GOODS","Created Date":"2026-05-08","_c":100,"_m":[],"_brand":"Man Matters","_changed":false},{"Product Code":"MWMMSKP.5066.AAAABO_N","Name":"Man Matters Anti Pigmentation Serum 30ml","Brand":"Man Matters","Category Name":"Default","MRP":599.0,"HSN CODE":"33059090","EAN":"8904529300578","Cost Price":122.0,"Scan Identifier":"8904529300578","Length (mm)":92,"Width (mm)":36,"Height (mm)":90,"Weight (gms)":30.0,"Tax Type Code":"DEFAULT","GST Tax Type Code":"18","Dispatch expiry tolerance (in days)":90.0,"Shelf Life":720.0,"Sku Type":"GOODS","Created Date":"2026-05-08","_c":100,"_m":[],"_brand":"Man Matters","_changed":false},{"Product Code":"MWMMSKP.5065.AAAABO_N","Name":"Man Matters Matte Sunscreen SPF 50","Brand":"Man Matters","Category Name":"Default","MRP":499.0,"HSN CODE":"33049930","EAN":"8904529300585","Cost Price":105.0,"Scan Identifier":"8904529300585","Length (mm)":50,"Width (mm)":50,"Height (mm)":98,"Weight (gms)":50.0,"Tax Type Code":"DEFAULT","GST Tax Type Code":"18","Dispatch expiry tolerance (in days)":90.0,"Shelf Life":720.0,"Sku Type":"GOODS","Created Date":"2026-05-08","_c":100,"_m":[],"_brand":"Man Matters","_changed":false},{"Product Code":"MWBBOCP.0010.BO_N","Name":"Be Bodywise Pain Relief Roll On  - 50 ml","Brand":"Be Bodywise","Category Name":"Default","MRP":549.0,"HSN CODE":"30049011","EAN":"8904529300608","Cost Price":67.0,"Scan Identifier":"8904529300608","Length (mm)":98,"Width (mm)":32,"Height (mm)":90,"Weight (gms)":50.0,"Tax Type Code":"DEFAULT","GST Tax Type Code":"18","Dispatch expiry tolerance (in days)":90.0,"Shelf Life":270.0,"Sku Type":"GOODS","Created Date":"2026-05-08","_c":100,"_m":[],"_brand":"Be Bodywise","_changed":false},{"Product Code":"MWBWSKK.00822.BO_N","Name":"Be Bodywise 5% AHA BHA Exfoliating Body Wash (Flora) - 250 ml","Brand":"Be Bodywise","Category Name":"Default","MRP":399.0,"HSN CODE":"34013090","EAN":"8904529300615","Cost Price":84.32,"Scan Identifier":"8904529300615","Length (mm)":178,"Width (mm)":52,"Height (mm)":180,"Weight (gms)":250.0,"Tax Type Code":"DEFAULT","GST Tax Type Code":"18","Dispatch expiry tolerance (in days)":90.0,"Shelf Life":720.0,"Sku Type":"GOODS","Created Date":"2026-05-08","_c":100,"_m":[],"_brand":"Be Bodywise","_changed":false},{"Product Code":"MWBWSKK.00821.BO_N","Name":"Be Bodywise 5% AHA BHA Exfoliating Body Wash (Flora) - 700 ml","Brand":"Be Bodywise","Category Name":"Default","MRP":799.0,"HSN CODE":"34013090","EAN":"8904529300622","Cost Price":206.0,"Scan Identifier":"8904529300622","Length (mm)":248,"Width (mm)":72,"Height (mm)":255,"Weight (gms)":700.0,"Tax Type Code":"DEFAULT","GST Tax Type Code":"18","Dispatch expiry tolerance (in days)":90.0,"Shelf Life":720.0,"Sku Type":"GOODS","Created Date":"2026-05-08","_c":100,"_m":[],"_brand":"Be Bodywise","_changed":false}]</script>
 <script>(function() {
 "use strict";
 
 var RAW = JSON.parse(document.getElementById("itemData").textContent);
 
+// Updated fields: "Determine Expiry From" REMOVED, "Dispatch expiry tolerance (in days)" ADDED
 var TRACKED = [
-  "Name","Scan Identifier",
-  "Length (mm)","Width (mm)","Height (mm)","Weight (gms)",
-  "EAN","Brand","Tax Type Code","GST Tax Type Code",
-  "Cost Price","MRP","HSN CODE",
-  "Determine Expiry From","Shelf Life","Sku Type"
+  "Name", "Scan Identifier",
+  "Length (mm)", "Width (mm)", "Height (mm)", "Weight (gms)",
+  "EAN", "Brand",
+  "Tax Type Code", "GST Tax Type Code",
+  "Cost Price", "MRP", "HSN CODE",
+  "Dispatch expiry tolerance (in days)", "Shelf Life", "Sku Type"
 ];
 
-var CRITICAL = ["EAN","Cost Price","HSN CODE","MRP","Brand"];
+var CRITICAL = ["EAN", "Cost Price", "HSN CODE", "MRP", "Brand"];
 
 var BRAND_MAP = {
-  "littlejoys":"Little Joys","little joys":"Little Joys",
-  "bebodywise":"Be Bodywise","be bodywise":"Be Bodywise",
-  "manmatters":"Man Matters","man matters":"Man Matters",
-  "beardhood":"Beardhood","own":"OWN",
-  "bb":"Be Bodywise","mm":"Man Matters","lj":"Little Joys"
+  "littlejoys":"Little Joys",  "little joys":"Little Joys",
+  "bebodywise":"Be Bodywise",  "be bodywise":"Be Bodywise",
+  "manmatters":"Man Matters",  "man matters":"Man Matters",
+  "beardhood":"Beardhood",     "own":"OWN",
+  "bb":"Be Bodywise",          "mm":"Man Matters",  "lj":"Little Joys"
 };
 
 function stdBrand(v) {
@@ -358,76 +363,43 @@ function mkPill(p) {
   return '<span class="pill p-err">&#10007; ' + p + '%</span>';
 }
 
-// State — no legacy toggle, "all" = all 8 items
-var F = {1:"all", 2:"all", 3:"all"};
 var artSortCol = "_c", artSortDir = 1, artFiltered = [];
-
-// Update counts in toggles
-["tc-all","tc-all2"].forEach(function(id) {
-  var el = document.getElementById(id);
-  if (el) el.textContent = RAW.length;
-});
-
-// Brand counts for toggle chips
-var brandCounts = {};
-RAW.forEach(function(r) {
-  var b = r._brand;
-  brandCounts[b] = (brandCounts[b] || 0) + 1;
-});
-
-function getData() { return RAW; }
 
 window.goPage = function(id) {
   ["overview","articles","brands"].forEach(function(p) {
     document.getElementById("page-" + p).classList.remove("active");
-    document.getElementById("nav-" + p).classList.remove("active");
+    document.getElementById("nav-"  + p).classList.remove("active");
   });
   document.getElementById("page-" + id).classList.add("active");
-  document.getElementById("nav-" + id).classList.add("active");
+  document.getElementById("nav-"  + id).classList.add("active");
   if      (id === "overview")  renderOverview();
-  else if (id === "articles")  { fillBrandSel(); artApply(); }
+  else if (id === "articles") { fillBrandSel(); artApply(); }
   else if (id === "brands")    renderBrands();
 };
 
-window.setF = function(page, val, el) {
-  F[page] = val;
-  el.closest(".tgroup").querySelectorAll(".tpill").forEach(function(p) { p.classList.remove("on"); });
-  el.classList.add("on");
-  if      (page === 1) renderOverview();
-  else if (page === 2) renderBrands();
-  else if (page === 3) { fillBrandSel(); artApply(); }
-};
-
-// Brand filter for overview/articles
-function getBrandData(page) {
-  var f = F[page];
-  if (f === "all") return RAW;
-  return RAW.filter(function(r) { return r._brand === f; });
-}
-
 /* ── PAGE 1: DATA HYGIENE STATUS ── */
 function renderOverview() {
-  var data = getBrandData(1);
+  var data = RAW;
   document.getElementById("ov-total").textContent = data.length;
-  document.getElementById("nb-ov").textContent = data.length;
+  document.getElementById("nb-ov").textContent    = data.length;
 
-  var avgC = data.length ? Math.round(data.reduce(function(a,r){ return a+r._c; }, 0)/data.length) : 0;
-  var critGaps = 0, gaps = 0, fullCount = 0;
+  var avgC = data.length
+    ? Math.round(data.reduce(function(a,r){ return a + r._c; }, 0) / data.length) : 0;
 
   var fields = TRACKED.map(function(f) {
     var filled  = data.filter(function(r) { return fieldOk(r[f]); }).length;
     var missing = data.length - filled;
-    var p = pct(filled, data.length);
-    if (p < 100) gaps++;
-    if (p < 50 && CRITICAL.indexOf(f) >= 0) critGaps++;
-    if (p === 100) fullCount++;
-    return { f:f, missing:missing, p:p };
+    return { f: f, missing: missing, p: pct(filled, data.length) };
   }).sort(function(a,b) { return a.p - b.p; });
 
-  document.getElementById("ov-gaps").textContent  = gaps;
-  document.getElementById("ov-comp").textContent  = avgC + "%";
-  document.getElementById("ov-crit").textContent  = critGaps;
-  document.getElementById("ov-full").textContent  = data.filter(function(r){ return r._c === 100; }).length;
+  var gaps      = fields.filter(function(f) { return f.p < 100; }).length;
+  var critGaps  = fields.filter(function(f) { return f.p < 50 && CRITICAL.indexOf(f.f) >= 0; }).length;
+  var fullCount = data.filter(function(r) { return r._c === 100; }).length;
+
+  document.getElementById("ov-gaps").textContent = gaps;
+  document.getElementById("ov-comp").textContent = avgC + "%";
+  document.getElementById("ov-crit").textContent = critGaps;
+  document.getElementById("ov-full").textContent = fullCount;
 
   var ml = document.getElementById("matrixList");
   ml.innerHTML = "";
@@ -438,7 +410,7 @@ function renderOverview() {
     div.innerHTML =
       '<div class="gap-name' + (isCrit ? " crit-key" : "") + '">' + row.f + '</div>' +
       '<div class="gap-bar-track"><div class="gap-bar-fill" style="width:' + row.p + '%;background:' + clr(row.p) + '"></div></div>' +
-      '<span class="mono" style="font-size:10.5px;text-align:right;color:' + (row.missing ? "var(--red)" : "var(--green)") + '">' + (row.missing ? "-"+row.missing : "") + '</span>' +
+      '<span class="mono" style="font-size:10.5px;text-align:right;color:' + (row.missing ? "var(--red)" : "var(--green)") + '">' + (row.missing ? "-" + row.missing : "") + '</span>' +
       '<div>' + mkPill(row.p) + '</div>';
     ml.appendChild(div);
   });
@@ -466,19 +438,18 @@ window.artApply = function() {
       return r[k] && String(r[k]).toLowerCase().indexOf(srch) >= 0;
     });
     var mb = br === "all" || r._brand === br;
-    var mc = st === "all" || (st==="inc" && r._c < 100) || (st==="ok" && r._c === 100);
+    var mc = st === "all" || (st === "inc" && r._c < 100) || (st === "ok" && r._c === 100);
     return ms && mb && mc;
   }).sort(function(a,b) {
-    var col = artSortCol;
-    var va = a[col] !== undefined ? a[col] : "";
-    var vb = b[col] !== undefined ? b[col] : "";
-    if (!isNaN(parseFloat(va)) && !isNaN(parseFloat(vb))) { va=parseFloat(va); vb=parseFloat(vb); }
-    else { va=String(va).toLowerCase(); vb=String(vb).toLowerCase(); }
+    var va = a[artSortCol] !== undefined ? a[artSortCol] : "";
+    var vb = b[artSortCol] !== undefined ? b[artSortCol] : "";
+    if (!isNaN(parseFloat(va)) && !isNaN(parseFloat(vb))) { va = parseFloat(va); vb = parseFloat(vb); }
+    else { va = String(va).toLowerCase(); vb = String(vb).toLowerCase(); }
     return va < vb ? -artSortDir : va > vb ? artSortDir : 0;
   });
 
   document.getElementById("artCount").textContent = artFiltered.length + " items";
-  document.getElementById("nb-ar").textContent = artFiltered.length;
+  document.getElementById("nb-ar").textContent    = artFiltered.length;
   renderArtTable();
 };
 
@@ -496,25 +467,21 @@ function chk(val) {
 function renderArtTable() {
   var tb = document.getElementById("artBody");
   tb.innerHTML = "";
-
   artFiltered.forEach(function(r) {
     var comp = r._c;
-    var cc = comp >= 80 ? "var(--green)" : comp >= 50 ? "var(--amber)" : "var(--red)";
+    var cc   = comp >= 80 ? "var(--green)" : comp >= 50 ? "var(--amber)" : "var(--red)";
     var miss = r._m || [];
-    var nm = String(r["Name"] || "—");
-    var nms = nm.length > 32 ? nm.substring(0, 32) + "…" : nm;
-    var mrp = r["MRP"] && fieldOk(r["MRP"])
+    var nm   = String(r["Name"] || "—");
+    var nms  = nm.length > 32 ? nm.substring(0,32) + "…" : nm;
+    var mrp  = r["MRP"] && fieldOk(r["MRP"])
       ? "&#8377;" + parseFloat(r["MRP"]).toLocaleString("en-IN")
       : '<span class="v-miss">—</span>';
-
     var brandCell = r._changed
       ? '<span class="brand-std">' + r._brand + '</span><span class="brand-orig">' + (r["Brand"]||"") + '</span>'
       : '<span class="brand-std">' + r._brand + '</span>';
-
     var stdCell = r._changed
       ? '<span class="v-miss" title="Update to: ' + r._brand + '">&#10007;</span>'
       : '<span class="v-ok">&#10003;</span>';
-
     var mTxt = miss.length
       ? '<span class="mono miss-cnt" title="' + miss.join(", ") + '">' + miss.length + ' pending</span>'
       : '<span class="v-ok">&#10003; Complete</span>';
@@ -527,21 +494,21 @@ function renderArtTable() {
       '<td style="font-size:11px;color:var(--ink3)">' + (r["Created Date"]||"—") + '</td>' +
       '<td><div class="cbar"><div class="cbar-track"><div class="cbar-fill" style="width:' + comp + '%;background:' + cc + '"></div></div><span class="cbar-pct" style="color:' + cc + '">' + comp + '%</span></div></td>' +
       '<td class="td-mrp">'  + mrp + '</td>' +
-      '<td>' + chk(r["EAN"])           + '</td>' +
-      '<td>' + chk(r["HSN CODE"])      + '</td>' +
-      '<td>' + chk(r["Cost Price"])    + '</td>' +
-      '<td>' + chk(r["Tax Type Code"]) + '</td>' +
-      '<td>' + stdCell                 + '</td>' +
-      '<td>' + mTxt + '</td>';
+      '<td>' + chk(r["EAN"])                                   + '</td>' +
+      '<td>' + chk(r["HSN CODE"])                              + '</td>' +
+      '<td>' + chk(r["Cost Price"])                            + '</td>' +
+      '<td>' + chk(r["Tax Type Code"])                         + '</td>' +
+      '<td>' + chk(r["Dispatch expiry tolerance (in days)"])   + '</td>' +
+      '<td>' + stdCell                                         + '</td>' +
+      '<td>' + mTxt                                            + '</td>';
     tb.appendChild(tr);
   });
 }
 
 /* ── PAGE 3: BRAND DATA HEALTH ── */
 function renderBrands() {
-  var srch = (document.getElementById("brandSrch").value || "").toLowerCase();
+  var srch   = (document.getElementById("brandSrch").value || "").toLowerCase();
   var brands = {};
-
   RAW.forEach(function(r) {
     var b = r._brand;
     if (!brands[b]) brands[b] = { total:0, miss:{}, needsStd:0 };
@@ -549,7 +516,6 @@ function renderBrands() {
     if (r._changed) brands[b].needsStd++;
     (r._m || []).forEach(function(f) { brands[b].miss[f] = (brands[b].miss[f]||0)+1; });
   });
-
   var list = Object.keys(brands)
     .map(function(b){ return {b:b, total:brands[b].total, miss:brands[b].miss, needsStd:brands[b].needsStd}; })
     .sort(function(a,x){ return x.total - a.total; })
@@ -560,26 +526,23 @@ function renderBrands() {
 
   var grid = document.getElementById("brandGrid");
   grid.innerHTML = "";
-
   list.forEach(function(item) {
-    var totalMiss = Object.values(item.miss).reduce(function(a,v){ return a+v; },0);
-    var worst = Object.keys(item.miss).sort(function(a,b){ return item.miss[b]-item.miss[a]; }).slice(0,5);
-    var cp = Math.round((1 - totalMiss/(item.total * TRACKED.length)) * 100);
-
+    var totalMiss = Object.values(item.miss).reduce(function(a,v){ return a+v; }, 0);
+    var worst     = Object.keys(item.miss).sort(function(a,b){ return item.miss[b]-item.miss[a]; }).slice(0,5);
+    var cp        = Math.round((1 - totalMiss/(item.total * TRACKED.length)) * 100);
     var stdBanner = item.needsStd > 0
-      ? '<div class="brand-std-alert">&#9888; ' + item.needsStd + ' SKU' + (item.needsStd>1?"s":"") + ' need brand name update in source system to <strong>' + item.b + '</strong></div>'
+      ? '<div class="brand-std-alert">&#9888; ' + item.needsStd + ' SKU' + (item.needsStd>1?"s":"") +
+        ' need brand name update in source to <strong>' + item.b + '</strong></div>'
       : '';
-
     var fh = worst.length === 0
       ? '<div class="v-ok" style="font-size:13px;padding:8px 0">&#10003; All 16 data fields complete</div>'
       : worst.map(function(f) {
           var cnt = item.miss[f];
-          var fp  = Math.round((1-cnt/item.total)*100);
+          var fp  = Math.round((1 - cnt/item.total)*100);
           return '<div class="bfield"><div class="bfield-name" title="' + f + '">' + f + '</div>' +
             '<div class="bfield-track"><div class="bfield-fill" style="width:'+fp+'%;background:'+clr(fp)+'"></div></div>' +
             '<div class="bfield-cnt" style="color:'+(cnt?"var(--red)":"var(--green)")+'">'+cnt+'</div></div>';
         }).join("");
-
     var div = document.createElement("div");
     div.className = "brand-card";
     div.innerHTML =
@@ -592,6 +555,8 @@ function renderBrands() {
 
 /* INIT */
 renderOverview();
+fillBrandSel();
+artApply();
 
 })();
 </script>
