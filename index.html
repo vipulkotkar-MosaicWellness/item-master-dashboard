@@ -394,19 +394,19 @@ select.fsel:focus{border-color:var(--teal)}
 <!-- DATA HYGIENE STATUS -->
 <div class="page active" id="page-overview">
   <div class="page-head">
-    <div><div class="page-title">Data Hygiene Status</div><div class="page-sub">SIMPLE SKUs &middot; In Live tracker &middot; 16 hygiene fields</div></div>
+    <div><div class="page-title">Data Hygiene Status</div><div class="page-sub">SIMPLE SKUs &middot; In Live tracker &middot; 15 hygiene fields</div></div>
   </div>
   <div class="kpi-row">
     <div class="kpi kk-teal"><div class="kpi-lbl">Total SKUs</div><div class="kpi-val" id="ov-total">-</div><div class="kpi-meta">SIMPLE + Live tracker</div></div>
     <div class="kpi kk-amber"><div class="kpi-lbl">Fields Pending</div><div class="kpi-val" id="ov-gaps">-</div><div class="kpi-meta">Below 100% fill rate</div></div>
-    <div class="kpi kk-green"><div class="kpi-lbl">Avg Completeness</div><div class="kpi-val" id="ov-comp">-</div><div class="kpi-meta">All 16 hygiene fields</div></div>
+    <div class="kpi kk-green"><div class="kpi-lbl">Avg Completeness</div><div class="kpi-val" id="ov-comp">-</div><div class="kpi-meta">All 15 hygiene fields</div></div>
     <div class="kpi kk-red"><div class="kpi-lbl">Critical Gaps</div><div class="kpi-val" id="ov-crit">-</div><div class="kpi-meta">EAN / Cost / HSN / MRP / Brand</div></div>
     <div class="kpi kk-blue"><div class="kpi-lbl">Data Verified</div><div class="kpi-val" id="ov-full">-</div><div class="kpi-meta">100% all fields complete</div></div>
   </div>
-  <div class="slbl">All 16 Fields &mdash; worst to best</div>
+  <div class="slbl">All 15 Fields &mdash; worst to best</div>
   <div class="card">
     <div class="card-hd">
-      <div class="card-title">&#128202; Data Hygiene Scorecard &middot; 16 Fields</div>
+      <div class="card-title">&#128202; Data Hygiene Scorecard &middot; 15 Fields</div>
       <div style="display:flex;gap:12px;font-size:11px;color:var(--ink3)">
         <span style="color:var(--green)">&#9679;</span>&ge;80%&nbsp;<span style="color:var(--amber)">&#9679;</span>50-79%&nbsp;<span style="color:var(--red)">&#9679;</span>&lt;50%&nbsp;<span style="color:var(--teal);font-weight:700">[KEY]</span>=critical
       </div>
@@ -434,7 +434,7 @@ select.fsel:focus{border-color:var(--teal)}
       <th onclick="artSortBy('Product Code')">SKU</th><th onclick="artSortBy('Name')">Item Name</th>
       <th onclick="artSortBy('_brand')">Brand</th><th onclick="artSortBy('Created Date')">Created</th>
       <th onclick="artSortBy('_c')">Complete %</th><th onclick="artSortBy('MRP')">MRP</th>
-      <th>EAN</th><th>HSN</th><th>Cost Price</th><th>Tax Code</th><th>Dispatch Expiry</th><th>Pending Fields</th><th>Status</th>
+      <th>EAN</th><th>HSN</th><th>Tax Code</th><th>Dispatch Expiry</th><th>Pending Fields</th><th>Status</th>
     </tr></thead>
     <tbody id="artBody"></tbody>
   </table></div><div class="pager"><span id="artPgInfo"></span></div></div>
@@ -463,10 +463,10 @@ var TRACKED = [
   "Name","Scan Identifier",
   "Length (mm)","Width (mm)","Height (mm)","Weight (gms)",
   "EAN","Brand","Tax Type Code","GST Tax Type Code",
-  "Cost Price","MRP","HSN CODE",
+  "MRP","HSN CODE",
   "Dispatch expiry tolerance (in days)","Shelf Life","Sku Type"
 ];
-var CRITICAL = ["EAN","Cost Price","HSN CODE","MRP","Brand"];
+var CRITICAL = ["EAN","HSN CODE","MRP","Brand"];
 var BRAND_MAP = {
   "littlejoys":"Little Joys","little joys":"Little Joys",
   "bebodywise":"Be Bodywise","be bodywise":"Be Bodywise",
@@ -619,7 +619,7 @@ function buildTable(tbodyId,rows){
   var tb=document.getElementById(tbodyId); tb.innerHTML="";
   if(rows.length===0){
     var empty=document.createElement("tr");
-    empty.innerHTML='<td colspan="12" style="text-align:center;padding:32px;color:var(--ink3);font-style:italic">No items for this selection</td>';
+    empty.innerHTML='<td colspan="11" style="text-align:center;padding:32px;color:var(--ink3);font-style:italic">No items for this selection</td>';
     tb.appendChild(empty); return;
   }
   rows.forEach(function(r){
@@ -640,7 +640,6 @@ function buildTable(tbodyId,rows){
       '<td class="td-mrp">'+mrp+'</td>'+
       '<td>'+chk(r["EAN"])+'</td>'+
       '<td>'+chk(r["HSN CODE"])+'</td>'+
-      '<td>'+chk(r["Cost Price"])+'</td>'+
       '<td>'+chk(r["Tax Type Code"])+'</td>'+
       '<td>'+chk(r["Dispatch expiry tolerance (in days)"])+'</td>'+
       '<td>'+mt+'</td>'+
@@ -710,7 +709,7 @@ window.exportReport=function(type){
   var rows=window["_rep_"+type]||[];
   var label=type==="grn"?"GRN_Last_Week":"Overall";
   var headers=["Product Code","Item Name","Brand (Standardized)","Brand (Original)","Created Date",
-    "Completeness %","MRP","EAN","HSN CODE","Cost Price","Tax Type Code",
+    "Completeness %","MRP","EAN","HSN CODE","Tax Type Code",
     "Dispatch expiry tolerance (in days)","Brand Standardization","Missing Fields"];
   var csvRows=[headers.join(",")];
   rows.forEach(function(r){
@@ -725,7 +724,6 @@ window.exportReport=function(type){
       r["MRP"]||"",
       r["EAN"]||"",
       r["HSN CODE"]||"",
-      r["Cost Price"]||"",
       r["Tax Type Code"]||"",
       r["Dispatch expiry tolerance (in days)"]||"",
       r._changed?"Needs Update":"Standard",
@@ -782,7 +780,7 @@ window.exportArticleData=function(){
   var rows=artFiltered;
   var label=GLOBAL_VIEW==="grn"?"GRN_Last_Week":"Overall";
   var headers=["Product Code","Item Name","Brand","Created Date","Completeness %",
-    "Status","MRP","EAN","HSN CODE","Cost Price","Tax Type Code",
+    "Status","MRP","EAN","HSN CODE","Tax Type Code",
     "Dispatch expiry tolerance (in days)","Missing Fields"];
   var csvRows=[headers.join(",")];
   rows.forEach(function(r){
@@ -798,7 +796,6 @@ window.exportArticleData=function(){
       r["MRP"]||"",
       r["EAN"]||"",
       r["HSN CODE"]||"",
-      r["Cost Price"]||"",
       r["Tax Type Code"]||"",
       r["Dispatch expiry tolerance (in days)"]||"",
       '"'+miss.join("; ")+'"'
