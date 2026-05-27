@@ -256,6 +256,20 @@ select.fsel:focus{border-color:var(--teal)}
 .win-brand-chip strong{background:var(--teal);color:#fff;border-radius:4px;
   padding:0 6px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700}
 
+/* No Activity Banner */
+.no-activity-banner{
+  text-align:center;padding:48px 32px;
+  background:linear-gradient(135deg,#f8faff 0%,#f0f4ff 100%);
+  border:1.5px dashed #c7d0ff;border-radius:12px;margin:8px 16px 16px;
+}
+.nab-icon{font-size:40px;margin-bottom:14px;opacity:.6}
+.nab-title{font-size:17px;font-weight:800;color:var(--ink);margin-bottom:8px;letter-spacing:-.3px}
+.nab-sub{font-size:13px;color:var(--ink3);line-height:1.7;max-width:400px;margin:0 auto 12px}
+.nab-meta{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;
+  background:#eef1ff;border:1px solid #c7d0ff;border-radius:8px;
+  font-size:12px;color:#2757ff;font-weight:600}
+.nab-meta strong{font-weight:700}
+
 /* ── GLOBAL TOGGLE BAR ── */
 .global-bar{
   background:#fff;border-bottom:1.5px solid var(--border);
@@ -298,6 +312,7 @@ select.fsel:focus{border-color:var(--teal)}
 .vb-chip{display:inline-flex;align-items:center;padding:5px 13px;border-radius:7px;
   font-size:12px;font-weight:700;white-space:nowrap;flex-shrink:0}
 .vb-chip.vb-blue{background:#eef1ff;color:#2757ff;border:1.5px solid #c7d0ff}
+.vb-chip.vb-purple{background:#f5f3ff;color:#7c3aed;border:1.5px solid #ddd6fe}
 .vb-chip.vb-teal{background:var(--teal-s);color:var(--teal);border:1.5px solid var(--teal-m)}
 .vb-desc{font-size:12px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .vb-desc strong{color:var(--ink2);font-weight:700}
@@ -313,6 +328,7 @@ select.fsel:focus{border-color:var(--teal)}
 .gtpill:hover{color:var(--ink);background:rgba(0,0,0,.04)}
 .gtpill.on{color:#fff;box-shadow:0 2px 10px rgba(15,22,35,.15)}
 .gtpill.gt-grn.on{background:linear-gradient(135deg,#2757ff,#6d28d9)}
+.gtpill.gt-apr.on{background:linear-gradient(135deg,#7c3aed,#a855f7)}
 .gtpill.gt-ov.on{background:linear-gradient(135deg,#1a6b5a,#2e9e80)}
 
 .global-bar{background:#fff;border-bottom:1.5px solid var(--border);padding:11px 24px;
@@ -321,6 +337,7 @@ select.fsel:focus{border-color:var(--teal)}
 .vb-chip{display:inline-flex;align-items:center;padding:5px 13px;border-radius:7px;
   font-size:12px;font-weight:700;white-space:nowrap;flex-shrink:0}
 .vb-chip.vb-blue{background:#eef1ff;color:#2757ff;border:1.5px solid #c7d0ff}
+.vb-chip.vb-purple{background:#f5f3ff;color:#7c3aed;border:1.5px solid #ddd6fe}
 .vb-chip.vb-teal{background:var(--teal-s);color:var(--teal);border:1.5px solid var(--teal-m)}
 .vb-desc{font-size:12px;color:var(--ink3)}
 .vb-desc strong{color:var(--ink2);font-weight:700}
@@ -335,6 +352,7 @@ select.fsel:focus{border-color:var(--teal)}
 .gtpill:hover{color:var(--ink);background:rgba(0,0,0,.04)}
 .gtpill.on{color:#fff;box-shadow:0 2px 10px rgba(15,22,35,.15)}
 .gtpill.gt-grn.on{background:linear-gradient(135deg,#2757ff,#6d28d9)}
+.gtpill.gt-apr.on{background:linear-gradient(135deg,#7c3aed,#a855f7)}
 .gtpill.gt-ov.on{background:linear-gradient(135deg,#1a6b5a,#2e9e80)}
 .nav-sec-divider{height:1px;background:var(--border);margin:8px 10px}
 /* Report summary strip */
@@ -369,7 +387,8 @@ select.fsel:focus{border-color:var(--teal)}
     <span class="gt-label">View</span>
     <div class="gt-group">
       <button class="gtpill gt-grn" onclick="setGlobalView('grn',this)">GRN Last Week</button>
-      <button class="gtpill gt-ov on" onclick="setGlobalView('overall',this)">Overall</button>
+      <button class="gtpill gt-apr" onclick="setGlobalView('grnapr',this)">GRN After Apr 2026</button>
+      <button class="gtpill gt-ov on" onclick="setGlobalView('overall',this)">Overall SKU</button>
     </div>
   </div>
 </div>
@@ -500,13 +519,33 @@ function chk(val){
   return fieldOk(val)?'<span class="v-ok">&#10003;</span>':'<span class="v-miss">&#10007;</span>';
 }
 
-// Fixed datasets
-var GRN_WEEK = RAW.filter(function(r){ return r._is_active; });
-var OVERALL  = RAW;
+// Fixed datasets — 3 tabs
+// Tab 1: GRN Last Week = Live SKU + Created 18-24 May 2026
+var MAY18 = new Date("2026-05-18");
+var MAY25 = new Date("2026-05-25");
+var APR1  = new Date("2026-04-01");
+
+var GRN_WEEK = RAW.filter(function(r){
+  if(!r["Created Date"]) return false;
+  var d = new Date(r["Created Date"]);
+  return d >= MAY18 && d < MAY25;
+});
+// Tab 2: GRN After April 2026 = Live SKU + Created >= 01 Apr 2026
+var GRN_APR  = RAW.filter(function(r){
+  if(!r["Created Date"]) return false;
+  var d = new Date(r["Created Date"]);
+  return d >= APR1;
+});
+// Tab 3: Overall = all Live SKUs
+var OVERALL = RAW;
 
 // Global toggle state
 var GLOBAL_VIEW = "overall";
-function getViewData(){ return GLOBAL_VIEW==="grn"?GRN_WEEK:OVERALL; }
+function getViewData(){
+  if(GLOBAL_VIEW==="grn")    return GRN_WEEK;
+  if(GLOBAL_VIEW==="grnapr") return GRN_APR;
+  return OVERALL;
+}
 
 window.setGlobalView = function(view,el){
   GLOBAL_VIEW=view;
@@ -527,9 +566,12 @@ function updateBanner(){
   if(!el) return;
   if(GLOBAL_VIEW==="grn"){
     el.innerHTML='<span class="vb-chip vb-blue">GRN Last Week</span>'+
+      '<span class="vb-desc">SIMPLE &middot; Created 18&ndash;24 May 2026 &middot; Live tracker &middot; <strong>'+data.length+' items</strong></span>';
+  } else if(GLOBAL_VIEW==="grnapr"){
+    el.innerHTML='<span class="vb-chip vb-purple">GRN After April 2026</span>'+
       '<span class="vb-desc">SIMPLE &middot; Created &ge; 01 Apr 2026 &middot; Live tracker &middot; <strong>'+data.length+' items</strong></span>';
   } else {
-    el.innerHTML='<span class="vb-chip vb-teal">Overall</span>'+
+    el.innerHTML='<span class="vb-chip vb-teal">Overall SKU</span>'+
       '<span class="vb-desc">All SIMPLE &middot; Live tracker &middot; All dates &middot; <strong>'+data.length+' items</strong></span>';
   }
 }
@@ -552,18 +594,50 @@ window.goPage=function(id){
 /* DATA HYGIENE STATUS */
 function renderOverview(){
   var data=getViewData();
-  document.getElementById("ov-total").textContent=data.length;
+  var noData=(data.length===0);
+
+  // Update sidebar badge
   document.getElementById("nb-ov").textContent=data.length;
-  var avgC=data.length?Math.round(data.reduce(function(a,r){return a+r._c;},0)/data.length):0;
+
+  // KPIs
+  document.getElementById("ov-total").textContent=data.length;
+  document.getElementById("ov-gaps").textContent=noData?"N/A":
+    (function(){var fields=TRACKED.map(function(f){var filled=data.filter(function(r){return fieldOk(r[f]);}).length;return pct(filled,data.length);});return fields.filter(function(p){return p<100;}).length;})();
+  document.getElementById("ov-comp").textContent=noData?"N/A":
+    Math.round(data.reduce(function(a,r){return a+r._c;},0)/data.length)+"%";
+  document.getElementById("ov-crit").textContent=noData?"N/A":
+    (function(){var fields=TRACKED.map(function(f){var filled=data.filter(function(r){return fieldOk(r[f]);}).length;return{f:f,p:pct(filled,data.length)};});return fields.filter(function(x){return x.p<50&&CRITICAL.indexOf(x.f)>=0;}).length;})();
+  document.getElementById("ov-full").textContent=noData?"N/A":
+    data.filter(function(r){return r._c===100;}).length;
+
+  // Style N/A KPIs with muted colour
+  ["ov-gaps","ov-comp","ov-crit","ov-full"].forEach(function(id){
+    var el=document.getElementById(id);
+    if(el) el.style.color=noData?"#b0bcd4":"";
+  });
+
+  var ml=document.getElementById("matrixList"); ml.innerHTML="";
+
+  // No-activity state
+  if(noData){
+    var banner=document.createElement("div");
+    banner.className="no-activity-banner";
+    banner.innerHTML=
+      '<div class="nab-icon">&#128197;</div>'+
+      '<div class="nab-title">No GRN Activity This Week</div>'+
+      '<div class="nab-sub">No new SIMPLE SKUs matching the Live tracker were received in this period. '+
+      'The dashboard will refresh automatically when new items are added.</div>'+
+      '<div class="nab-meta">Switch to <strong>GRN After Apr 2026</strong> or <strong>Overall SKU</strong> to view existing hygiene data.</div>';
+    ml.appendChild(banner);
+    return;
+  }
+
+  // Normal scorecard
   var fields=TRACKED.map(function(f){
     var filled=data.filter(function(r){return fieldOk(r[f]);}).length;
     return{f:f,missing:data.length-filled,p:pct(filled,data.length)};
   }).sort(function(a,b){return a.p-b.p;});
-  document.getElementById("ov-gaps").textContent=fields.filter(function(f){return f.p<100;}).length;
-  document.getElementById("ov-comp").textContent=avgC+"%";
-  document.getElementById("ov-crit").textContent=fields.filter(function(f){return f.p<50&&CRITICAL.indexOf(f.f)>=0;}).length;
-  document.getElementById("ov-full").textContent=data.filter(function(r){return r._c===100;}).length;
-  var ml=document.getElementById("matrixList"); ml.innerHTML="";
+
   fields.forEach(function(row){
     var isCrit=CRITICAL.indexOf(row.f)>=0;
     var div=document.createElement("div"); div.className="gap-row";
@@ -619,7 +693,16 @@ function buildTable(tbodyId,rows){
   var tb=document.getElementById(tbodyId); tb.innerHTML="";
   if(rows.length===0){
     var empty=document.createElement("tr");
-    empty.innerHTML='<td colspan="11" style="text-align:center;padding:32px;color:var(--ink3);font-style:italic">No items for this selection</td>';
+    var msg=GLOBAL_VIEW==="grn"
+      ? "No GRN activity this week &mdash; no items received in this period"
+      : "No items match the current filter selection";
+    empty.innerHTML='<td colspan="11" style="text-align:center;padding:36px;color:var(--ink3)">'+
+      '<div style="font-size:20px;margin-bottom:8px">&#128197;</div>'+
+      '<div style="font-size:13px;font-weight:600;color:var(--ink2);margin-bottom:4px">'+
+        (GLOBAL_VIEW==="grn"?"No GRN Activity This Week":"No Items Found")+
+      '</div>'+
+      '<div style="font-size:12px">'+msg+'</div>'+
+    '</td>';
     tb.appendChild(empty); return;
   }
   rows.forEach(function(r){
@@ -778,7 +861,7 @@ function renderBrands(){
 /* EXPORT ARTICLE DATA */
 window.exportArticleData=function(){
   var rows=artFiltered;
-  var label=GLOBAL_VIEW==="grn"?"GRN_Last_Week":"Overall";
+  var label=GLOBAL_VIEW==="grn"?"GRN_Last_Week_18to24May":GLOBAL_VIEW==="grnapr"?"GRN_After_Apr2026":"Overall_SKU";
   var headers=["Product Code","Item Name","Brand","Created Date","Completeness %",
     "Status","MRP","EAN","HSN CODE","Tax Type Code",
     "Dispatch expiry tolerance (in days)","Missing Fields"];
